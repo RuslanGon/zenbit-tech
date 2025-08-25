@@ -8,17 +8,17 @@ import { checkAuth } from './utils/checkAuth.js';
 
 const app = express();
 
-// Middleware
+
 app.use(cors());
 app.use(express.json());
 
-// Регистрация, логин, получение своего профиля
+
 app.post("/auth/register", register);
 app.post("/auth/login", login);
 
-app.post("/", checkAuth, createApplication);          // создать заявку
-app.get("/", checkAuth, getApplications);            // получить все
-app.get("/:id", checkAuth, getApplicationById);      // получить одну
+app.post("/", checkAuth, createApplication);         
+app.get("/", checkAuth, getApplications);           
+app.get("/:id", checkAuth, getApplicationById);      
 app.delete("/:id", checkAuth, deleteApplication);
 
 

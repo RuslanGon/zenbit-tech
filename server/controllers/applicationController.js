@@ -1,6 +1,5 @@
 import Application from "../models/Application.js";
 
-// создать новую заявку
 export const createApplication = async (req, res) => {
   try {
     const { title, description } = req.body;
@@ -9,7 +8,7 @@ export const createApplication = async (req, res) => {
     }
 
     const application = await Application.create({
-      user: req.userId, // берём id пользователя из auth middleware
+      user: req.userId, 
       title,
       description,
     });
@@ -21,7 +20,6 @@ export const createApplication = async (req, res) => {
   }
 };
 
-// получить все заявки текущего пользователя
 export const getApplications = async (req, res) => {
   try {
     const applications = await Application.find({ user: req.userId }).sort({ createdAt: -1 });
@@ -32,7 +30,6 @@ export const getApplications = async (req, res) => {
   }
 };
 
-// удалить заявку по id
 export const deleteApplication = async (req, res) => {
   try {
     const app = await Application.findOneAndDelete({ _id: req.params.id, user: req.userId });
@@ -44,7 +41,6 @@ export const deleteApplication = async (req, res) => {
   }
 };
 
-// получить одну заявку
 export const getApplicationById = async (req, res) => {
   try {
     const app = await Application.findOne({ _id: req.params.id, user: req.userId });
