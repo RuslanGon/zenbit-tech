@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../features/auth/authSlice.js";
 import styles from "./Header.module.css";
@@ -7,11 +7,12 @@ import styles from "./Header.module.css";
 const Header = () => {
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     dispatch(logout());
+    navigate("/"); 
   };
-
   return (
     <header className={styles.header}>
       <Link to="/" className={styles.logo}>Zenbit Tech</Link>
