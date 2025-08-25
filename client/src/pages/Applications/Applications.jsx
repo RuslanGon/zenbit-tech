@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchApplications,
-  createApplication,
-} from "../../features/applications/applicationsSlice";
+import { fetchApplications, createApplication, setAuthToken } from "../../features/applications/applicationsSlice";
 import css from "./Applications.module.css";
 
 const Applications = () => {
   const dispatch = useDispatch();
   const { list, loading, error } = useSelector((state) => state.applications);
+  const token = useSelector((state) => state.auth.token);
 
   const [form, setForm] = useState({ title: "", description: "" });
 
   useEffect(() => {
-    dispatch(fetchApplications());
-  }, [dispatch]);
+    // Устанавливаем токен в axios
+    if (token) {
+      setAuthToken(token);
+      dispatch(fetchApplications());
+    }
+  }, [dispatch, token]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });

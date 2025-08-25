@@ -1,12 +1,21 @@
-
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import API, { setAuthToken } from "../../api.js";
+import axios from "axios";
 
-const token = localStorage.getItem("token");
-if (token) {
-  setAuthToken(token);
-}
+// базовый URL твоего backend
+const API = axios.create({
+  baseURL: "http://localhost:5000",
+});
 
+// Устанавливаем токен в заголовки
+export const setAuthToken = (token) => {
+  if (token) {
+    API.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  } else {
+    delete API.defaults.headers.common["Authorization"];
+  }
+};
+
+// Получить все заявки текущего пользователя
 export const fetchApplications = createAsyncThunk(
   "applications/fetchApplications",
   async (_, { rejectWithValue }) => {
@@ -19,24 +28,13 @@ export const fetchApplications = createAsyncThunk(
   }
 );
 
+// Создать новую заявку для текущего пользователя
 export const createApplication = createAsyncThunk(
   "applications/createApplication",
   async (data, { rejectWithValue }) => {
     try {
       const res = await API.post("/applications", data);
       return res.data;
-    } catch (err) {
-      return rejectWithValue(err.response?.data || { message: err.message });
-    }
-  }
-);
-
-export const deleteApplication = createAsyncThunk(
-  "applications/deleteApplication",
-  async (id, { rejectWithValue }) => {
-    try {
-      await API.delete(`/applications/${id}`);
-      return id;
     } catch (err) {
       return rejectWithValue(err.response?.data || { message: err.message });
     }
@@ -50,45 +48,34 @@ const applicationsSlice = createSlice({
     loading: false,
     error: null,
   },
+  reducers: {},
   extraReducers: (builder) => {
     builder
+      // fetchApplications
       .addCase(fetchApplications.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(fetchApplications.fulfilled, (state, action) => {
         state.loading = false;
-        state.list = action.payload;
+        state.list = action.payload; // только текущий пользователь
       })
       .addCase(fetchApplications.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload?.message;
+        state.error = action.payload?.message || action.error.message;
       })
-
+      // createApplication
       .addCase(createApplication.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(createApplication.fulfilled, (state, action) => {
         state.loading = false;
-        state.list.unshift(action.payload);
+        state.list.unshift(action.payload); 
       })
       .addCase(createApplication.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload?.message;
-      })
-
-      .addCase(deleteApplication.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(deleteApplication.fulfilled, (state, action) => {
-        state.loading = false;
-        state.list = state.list.filter((app) => app._id !== action.payload);
-      })
-      .addCase(deleteApplication.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload?.message;
+        state.error = action.payload?.message || action.error.message;
       });
   },
 });
