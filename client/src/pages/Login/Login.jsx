@@ -29,12 +29,9 @@ const Login = () => {
 
   return (
     <div className={css.loginWrapper}>
-      {/* Левая часть с картинкой */}
       <div className={css.imageContainer}>
         <img src={login} alt="login" />
       </div>
-
-      {/* Правая часть с формой */}
       <div className={css.formContainer}>
         <h2>Login</h2>
         {error && <p className={css.error}>{error}</p>}
