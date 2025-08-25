@@ -24,7 +24,7 @@ const Register = () => {
     e.preventDefault();
     const result = await dispatch(registerUser(form));
     if (result.type === "auth/registerUser/fulfilled") {
-      navigate("/applications");
+      navigate("/login");
     }
   };
 
