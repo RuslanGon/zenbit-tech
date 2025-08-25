@@ -8,7 +8,7 @@ export const checkAuth = (req, res, next) => {
   const token = authHeader.split(" ")[1];
   try {
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
-    req.userId = decoded._id;
+    req.userId = decoded.id;
     next();
   } catch (err) {
     console.error(err);
