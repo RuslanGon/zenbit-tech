@@ -30,8 +30,8 @@ const MyApp = () => {
       <div className={css.list}>
         {list.map((app) => (
           <div key={app._id} className={css.item}>
-            <h3>{app.title}</h3>
-            <p>{app.description}</p>
+            <p>title: {app.title}</p>
+            <p>description: {app.description}</p>
             <FaTrash
               className={css.deleteIcon}
               onClick={() => handleDelete(app._id)}
