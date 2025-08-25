@@ -41,6 +41,23 @@ export const createApplication = createAsyncThunk(
   }
 );
 
+// Удалить заявку
+export const deleteApplication = createAsyncThunk(
+  "applications/deleteApplication",
+  async (id, { rejectWithValue, getState }) => {
+    try {
+      const token = getState().auth.token; // достаем токен из Redux
+      if (token) {
+        API.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      }
+      const res = await API.delete(`/applications/${id}`);
+      return id; // возвращаем id удаленной заявки
+    } catch (err) {
+      return rejectWithValue(err.response?.data || { message: err.message });
+    }
+  }
+);
+
 const applicationsSlice = createSlice({
   name: "applications",
   initialState: {
@@ -75,6 +92,13 @@ const applicationsSlice = createSlice({
       })
       .addCase(createApplication.rejected, (state, action) => {
         state.loading = false;
+        state.error = action.payload?.message || action.error.message;
+      })
+       // deleteApplication
+       .addCase(deleteApplication.fulfilled, (state, action) => {
+        state.list = state.list.filter(app => app._id !== action.payload);
+      })
+      .addCase(deleteApplication.rejected, (state, action) => {
         state.error = action.payload?.message || action.error.message;
       });
   },

@@ -1,19 +1,24 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchApplications, setAuthToken } from "../../features/applications/applicationsSlice";
+import { fetchApplications, setAuthToken, deleteApplication } from "../../features/applications/applicationsSlice";
+import { FaTrash } from "react-icons/fa";
 import css from "./MyApp.module.css";
 
 const MyApp = () => {
   const dispatch = useDispatch();
-  const token = useSelector((state) => state.auth.token); 
+  const token = useSelector((state) => state.auth.token);
   const { list, loading, error } = useSelector((state) => state.applications);
 
   useEffect(() => {
     if (token) {
-      setAuthToken(token); 
-      dispatch(fetchApplications()); 
+      setAuthToken(token);
+      dispatch(fetchApplications());
     }
   }, [dispatch, token]);
+
+  const handleDelete = (id) => {
+    dispatch(deleteApplication(id));
+  };
 
   return (
     <div className={css.container}>
@@ -27,6 +32,11 @@ const MyApp = () => {
           <div key={app._id} className={css.item}>
             <h3>{app.title}</h3>
             <p>{app.description}</p>
+            <FaTrash
+              className={css.deleteIcon}
+              onClick={() => handleDelete(app._id)}
+              title="Delete"
+            />
           </div>
         ))}
       </div>
