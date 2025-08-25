@@ -4,6 +4,7 @@ import Login from "./pages/Login/Login.jsx";
 import Header from "./components/Header/Header.jsx";
 import Home from "./pages/Home/Home.jsx";
 import Applications from "./pages/Applications/Applications.jsx";
+import GetStart from "./components/GetStart/GetStart.jsx";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/" element={<Home />} />   
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/get-start" element={<GetStart />} />
         <Route path="/applications" element={<Applications />} />
         <Route path="*" element={<Navigate to="/" />} ></Route>
       </Routes>

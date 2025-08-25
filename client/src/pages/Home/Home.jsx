@@ -10,7 +10,7 @@ const Home = () => {
           Numerous calculations predict, and experiments confirm, that the force field reflects the beam, 
           while the mass defect is not formed. The chemical compound is negatively charged. While the mass defect is
         </p>
-        <Link to="/" className={css.homeLink}>Get Started</Link>
+        <Link to="/get-start" className={css.homeLink}>Get Started</Link>
     </div>
   )
 }
