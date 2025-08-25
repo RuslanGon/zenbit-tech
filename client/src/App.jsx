@@ -2,16 +2,18 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Register from "./pages/Register/Register.jsx";
 import Login from "./pages/Login/Login.jsx";
 import Header from "./components/Header/Header.jsx";
+import Home from "./pages/Home/Home.jsx";
 
 function App() {
   return (
     <>
       <Header />
       <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/" element={<Home />} />   
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         {/* Позже добавим /applications */}
+        <Route path="*" element={<Navigate to="/" />} ></Route>
       </Routes>
     </>
   );

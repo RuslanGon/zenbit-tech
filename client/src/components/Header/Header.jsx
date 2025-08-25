@@ -8,7 +8,7 @@ const Header = () => {
 
   return (
     <header className={styles.header}>
-      <Link className={styles.logo}>Zenbit Tech</Link>
+      <Link to="/" className={styles.logo}>Zenbit Tech</Link>
       <nav>
         {user ? (
           <span>Привет, {user.name}</span>
