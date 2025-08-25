@@ -16,10 +16,10 @@ app.use(express.json());
 app.post("/auth/register", register);
 app.post("/auth/login", login);
 
-app.post("/", checkAuth, createApplication);         
-app.get("/", checkAuth, getApplications);           
-app.get("/:id", checkAuth, getApplicationById);      
-app.delete("/:id", checkAuth, deleteApplication);
+app.post("/applications", checkAuth, createApplication);         
+app.get("/applications", checkAuth, getApplications);           
+app.get("/applications/:id", checkAuth, getApplicationById);      
+app.delete("/applications/:id", checkAuth, deleteApplication);
 
 
 startServer(app);
