@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { registerUser } from "../../features/auth/authSlice.js"; 
-import { useNavigate } from "react-router-dom";
+import { registerUser } from "../../features/auth/authSlice.js";
+import { useNavigate, Link } from "react-router-dom";
+import login from '../../assets/login.png'; 
+import css from "./Register.module.css";
 
 const Register = () => {
   const dispatch = useDispatch();
@@ -22,46 +24,57 @@ const Register = () => {
     e.preventDefault();
     const result = await dispatch(registerUser(form));
     if (result.type === "auth/registerUser/fulfilled") {
-      navigate("/applications"); 
+      navigate("/applications");
     }
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: "50px auto", textAlign: "center" }}>
-      <h2>Регистрация</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="name"
-          placeholder="Имя"
-          value={form.name}
-          onChange={handleChange}
-          required
-          style={{ display: "block", margin: "10px 0", width: "100%" }}
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-          required
-          style={{ display: "block", margin: "10px 0", width: "100%" }}
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Пароль"
-          value={form.password}
-          onChange={handleChange}
-          required
-          style={{ display: "block", margin: "10px 0", width: "100%" }}
-        />
-        <button type="submit" disabled={loading} style={{ width: "100%", padding: "10px" }}>
-          {loading ? "Загрузка..." : "Зарегистрироваться"}
-        </button>
-      </form>
+    <div className={css.loginWrapper}>
+      {/* Левая часть с картинкой */}
+      <div className={css.imageContainer}>
+        <img src={login} alt="register" />
+      </div>
+
+      {/* Правая часть с формой */}
+      <div className={css.formContainer}>
+        <h2>Register</h2>
+        {error && <p className={css.error}>{error}</p>}
+        <form onSubmit={handleSubmit} className={css.form}>
+          <p>Name</p>
+          <input
+            type="text"
+            name="name"
+            placeholder="Name"
+            value={form.name}
+            onChange={handleChange}
+            required
+          />
+          <p>Email</p>
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={form.email}
+            onChange={handleChange}
+            required
+          />
+          <p>Password</p>
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={form.password}
+            onChange={handleChange}
+            required
+          />
+          <button type="submit" disabled={loading}>
+            {loading ? "Loading..." : "Sign Up"}
+          </button>
+        </form>
+        <p className={css.signUpText}>
+          Already have an account? <Link to="/login" className={css.signUpLink}>Sign In</Link>
+        </p>
+      </div>
     </div>
   );
 };

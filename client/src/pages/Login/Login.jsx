@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../features/auth/authSlice.js";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import login from '../../assets/login.png';
+import css from "./Login.module.css";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -21,37 +23,48 @@ const Login = () => {
     e.preventDefault();
     const result = await dispatch(loginUser(form));
     if (result.type === "auth/loginUser/fulfilled") {
-      navigate("/applications"); // после входа переходим к заявкам
+      navigate("/applications");
     }
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: "50px auto", textAlign: "center" }}>
-      <h2>Вход</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-          required
-          style={{ display: "block", margin: "10px 0", width: "100%" }}
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Пароль"
-          value={form.password}
-          onChange={handleChange}
-          required
-          style={{ display: "block", margin: "10px 0", width: "100%" }}
-        />
-        <button type="submit" disabled={loading} style={{ width: "100%", padding: "10px" }}>
-          {loading ? "Загрузка..." : "Войти"}
-        </button>
-      </form>
+    <div className={css.loginWrapper}>
+      {/* Левая часть с картинкой */}
+      <div className={css.imageContainer}>
+        <img src={login} alt="login" />
+      </div>
+
+      {/* Правая часть с формой */}
+      <div className={css.formContainer}>
+        <h2>Login</h2>
+        {error && <p className={css.error}>{error}</p>}
+        <form onSubmit={handleSubmit} className={css.form}>
+          <p>Email</p>
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={form.email}
+            onChange={handleChange}
+            required
+          />
+          <p>Password</p>
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={form.password}
+            onChange={handleChange}
+            required
+          />
+          <button type="submit" disabled={loading}>
+            {loading ? "Loading..." : "Sign In"}
+          </button>
+        </form>
+        <p className={css.signUpText}>
+          Don’t have account? <Link to="/register" className={css.signUpLink}>Sign Up</Link>
+        </p>
+      </div>
     </div>
   );
 };
