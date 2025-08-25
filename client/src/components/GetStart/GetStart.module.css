@@ -1,10 +1,10 @@
 .container {
     display: grid;
     grid-template-columns: repeat(2, 1fr); 
-    margin-top: 10px;
     gap: 7px; 
     margin-bottom: 7px; 
     width: max-content; 
+    background-color: #172234;
   }
   
   .image {
