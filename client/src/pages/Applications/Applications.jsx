@@ -1,38 +1,35 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchApplications, createApplication, setAuthToken } from "../../features/applications/applicationsSlice";
+import { createApplication } from "../../features/applications/applicationsSlice";
+import { useNavigate } from "react-router-dom";
 import css from "./Applications.module.css";
 
 const Applications = () => {
   const dispatch = useDispatch();
-  const { list, loading, error } = useSelector((state) => state.applications);
-  const token = useSelector((state) => state.auth.token);
+  const navigate = useNavigate();
+  const { token } = useSelector((state) => state.auth);
 
   const [form, setForm] = useState({ title: "", description: "" });
-
-  useEffect(() => {
-    // Устанавливаем токен в axios
-    if (token) {
-      setAuthToken(token);
-      dispatch(fetchApplications());
-    }
-  }, [dispatch, token]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.title.trim() || !form.description.trim()) return;
-    dispatch(createApplication(form));
-    setForm({ title: "", description: "" });
+
+    const result = await dispatch(createApplication(form));
+
+    if (result.type === "applications/createApplication/fulfilled") {
+      setForm({ title: "", description: "" });
+      navigate("/my-app"); // редирект на MyApp
+    }
   };
 
   return (
     <div className={css.container}>
-      <h2>Applications</h2>
-
+      <h2>Create Application</h2>
       <form onSubmit={handleSubmit} className={css.form}>
         <input
           type="text"
@@ -49,18 +46,6 @@ const Applications = () => {
         />
         <button type="submit">Create Application</button>
       </form>
-
-      {loading && <p>Loading...</p>}
-      {error && <p className={css.error}>{error}</p>}
-
-      <div className={css.list}>
-        {list.map((app) => (
-          <div key={app._id} className={css.item}>
-            <h3>{app.title}</h3>
-            <p>{app.description}</p>
-          </div>
-        ))}
-      </div>
     </div>
   );
 };

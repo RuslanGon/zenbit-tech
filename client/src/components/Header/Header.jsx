@@ -20,7 +20,9 @@ const Header = () => {
         {user ? (
           <div className={styles.userMenu}>
             <span className={styles.userName}>Hello, {user.name}</span>
-            <Link to="/applications" className={styles.navLink}>Applications</Link>
+            <Link to="/applications" className={styles.navLink}> Add applications</Link>
+            <Link to="/my-app" className={styles.navLink}> My applications</Link>
+
             <button onClick={handleLogout} className={styles.logoutButton}>Logout</button>
           </div>
         ) : (
