@@ -3,7 +3,8 @@ import axios from "axios";
 
 // базовый URL твоего backend
 const API = axios.create({
-  baseURL: "http://localhost:5000",
+  // baseURL: "http://localhost:5000",
+  baseURL: "https://zenbit-tech.onrender.com",
 });
 
 
