@@ -7,7 +7,7 @@ const API = axios.create({
   baseURL: "https://zenbit-tech.onrender.com",
 });
 
-
+// Установка токена
 export const setAuthToken = (token) => {
   if (token) {
     API.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -16,12 +16,14 @@ export const setAuthToken = (token) => {
   }
 };
 
+
 export const registerUser = createAsyncThunk(
   "auth/registerUser",
   async (userData, { rejectWithValue }) => {
     try {
       const res = await API.post("/auth/register", userData);
       setAuthToken(res.data.token);
+      localStorage.setItem("token", res.data.token);
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -35,6 +37,7 @@ export const loginUser = createAsyncThunk(
     try {
       const res = await API.post("/auth/login", userData);
       setAuthToken(res.data.token);
+      localStorage.setItem("token", res.data.token);
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -42,11 +45,17 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+const initialToken = localStorage.getItem("token");
+
+if (initialToken) {
+  setAuthToken(initialToken);
+}
+
 const authSlice = createSlice({
   name: "auth",
   initialState: {
     user: null,
-    token: null,
+    token: initialToken || null,
     loading: false,
     error: null,
   },
@@ -55,6 +64,7 @@ const authSlice = createSlice({
       state.user = null;
       state.token = null;
       setAuthToken(null);
+      localStorage.removeItem("token");
     },
   },
   extraReducers: (builder) => {
@@ -74,8 +84,6 @@ const authSlice = createSlice({
         state.loading = false;
         state.user = action.payload.user;
         state.token = action.payload.token;
-        localStorage.setItem("token", action.payload.token);  
-        setAuthToken(action.payload.token);
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
